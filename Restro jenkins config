@@ -1,0 +1,22 @@
+
+
+node{
+    
+    stage('Environment SetUp'){
+       git branch: 'main', poll: false, url: 'https://github.com/Prawin1947/retro.git'
+    }
+    
+   stage('build'){
+		def mvnHome = tool 'MAVEN'
+		withEnv(["MVN_HOME=$mvnHome"]) {
+			sh '"$MVN_HOME/bin/mvn" clean compile package'
+		}
+	}
+    
+     stage('Deployment'){
+     eploy adapters: [tomcat9(credentialsId: 'f6d708ea-dc9c-4761-9359-0cd7ebac7686', path: '', url: 'http://13.127.3.195:8080/')], contextPath: null, war: '**/*.war'
+    }
+    
+    
+    
+}
